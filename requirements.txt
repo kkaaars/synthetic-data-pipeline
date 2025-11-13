@@ -1,0 +1,8 @@
+Faker>=18.0.0
+python-docx
+openpyxl
+pandas
+pdfkit
+wkhtmltopdf
+python-pptx
+PyPDF2

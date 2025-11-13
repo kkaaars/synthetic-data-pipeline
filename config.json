@@ -1,0 +1,243 @@
+{
+  "random_seed": 42,
+  "per_sit_count": 100,
+  "tp_ratio": 0.5,
+  "formats": ["email", "chat", "document", "pdf", "email_with_attachment"],
+  "size_distribution": {
+    "min_words": 300,
+    "max_words": 4000,
+    "main_range_min": 500,
+    "main_range_max": 1500,
+    "main_range_share": 0.65
+  },
+  "sit_count_distribution": {
+    "1": 0.30,
+    "2-3": 0.30,
+    "4-6": 0.30,
+    ">6": 0.10
+  },
+  "instance_count_distribution": {
+    "1": 0.35,
+    "3-5": 0.35,
+    "6-10": 0.20,
+    ">10": 0.10
+  },
+  "confidence_rules": {
+    "high": {"type": "TP", "min_instances": 6},
+    "medium": [{"type":"TP","min_instances":3,"max_instances":5}, {"type":"FP","min_instances":3}],
+    "low": [{"type":"TP","max_instances":1}, {"type":"FP","max_instances":2}]
+  },
+  "sits": [
+    {
+      "id": "SIT_CCN",
+      "name": "Credit Card Number",
+      "regex": "\\b(?:(?:4\\d{3}|5[1-5]\\d{2}|3[47]\\d{2}|6(?:011|5\\d{2}))(?:[ \\-]?\\d{4}){3}|3[47]\\d{2}[ \\-]?\\d{6}[ \\-]?\\d{5})\\b",
+      "tc": ["Finance"]
+    },
+    {
+      "id": "SIT_SSN",
+      "name": "U.S. Social Security Number (SSN)",
+      "regex": "\\b\\d{3}-\\d{2}-\\d{4}\\b|(?i)(ssn[:\\s]*)(\\d{3}-\\d{2}-\\d{4})"
+,
+      "tc": ["HR","Tax"]
+    },
+    {
+      "id": "SIT_ITIN",
+      "name": "U.S. Individual Taxpayer Identification Number (ITIN)",
+      "regex": "\\b9\\d{2}-\\d{2}-\\d{4}\\b",
+      "tc": ["Tax"]
+    },
+    {
+      "id": "SIT_PASSPORT_US_UK",
+      "name": "U.S./U.K. Passport Number",
+      "regex": "(?i)(?:passport(?:\\s*(?:no|number|#)?)[:\\s]*)\\b([A-Z0-9]{6,9})\\b"
+,
+      "tc": ["Travel","HR"]
+    },
+    {
+      "id": "SIT_BANK_US",
+      "name": "U.S. Bank Account Number",
+      "regex": "(?i)(?:account(?:\\s*(?:no|number)?)[:\\s]*)\\b\\d{6,17}\\b|(?<=acct[:\\s])\\d{6,17}"
+,
+      "tc": ["Finance"]
+    },
+    {
+      "id": "SIT_DRIVER_US",
+      "name": "U.S. Driver's License Number",
+      "regex": "(?i)(?:driver(?:'s)?\\s*license(?:\\s*(?:no|number|#)?)[:\\s]*)\\b([A-Z0-9-]{4,15})\\b"
+,
+      "tc": ["HR"]
+    },
+    {
+      "id": "SIT_ABA",
+      "name": "ABA Routing Number",
+      "regex": "\\b(?!0{9})\\d{9}\\b",
+      "tc": ["Finance"]
+    },
+    {
+      "id": "SIT_DEA",
+      "name": "DEA Number",
+      "regex": "\\b(?!Z{2}\\d{7})[A-Z]{2}\\d{7}\\b",
+      "tc": ["Healthcare"]
+    },
+    {
+      "id": "SIT_EU_DEBIT",
+      "name": "EU Debit Card Number",
+      "regex": "\\b(?!0{13,19})\\d{13,19}\\b",
+      "tc": ["Finance"]
+    },
+    {
+      "id": "SIT_ICD10",
+      "name": "ICD-10-CM",
+      "regex": "\\b[A-TV-Z][0-9]{2}(?:\\.[0-9A-TV-Z]{1,4})?\\b",
+      "tc": ["Healthcare"]
+    },
+    {
+      "id": "SIT_ICD9",
+      "name": "ICD-9-CM",
+      "regex": "\\b\\d{3}(?:\\.\\d{1,2})?\\b",
+      "tc": ["Healthcare"]
+    },
+    {
+      "id": "SIT_SWIFT",
+      "name": "SWIFT Code",
+      "regex": "\\b[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}(?:[A-Z0-9]{3})?\\b",
+      "tc": ["Finance"]
+    },
+    {
+      "id": "SIT_CAN_SIN",
+      "name": "Canada Social Insurance Number (SIN)",
+      "regex": "\\b(?!0{3}-0{3}-0{3})\\d{3}-\\d{3}-\\d{3}\\b",
+      "tc": ["HR","Tax"]
+    },
+    {
+      "id": "SIT_CAN_BANK",
+      "name": "Canada Bank Account Number",
+      "regex": "\\b(?!0{7,12})\\d{7,12}\\b",
+      "tc": ["Finance"]
+    },
+    {
+      "id": "SIT_AUS_TFN",
+      "name": "Australia Tax File Number (TFN)",
+      "regex": "\\b(?!0{8,9})\\d{8,9}\\b",
+      "tc": ["Tax"]
+    },
+    {
+      "id": "SIT_CAN_PHIN",
+      "name": "Canada PHIN",
+      "regex": "(?i)(?:phin[:\\s]*)\\b\\d{9}\\b|(?i)(?:health(?:\\s*service)?(?:\\s*no|number)?[:\\s]*)\\b\\d{7,10}\\b"
+,
+      "tc": ["Healthcare"]
+    },
+    {
+      "id": "SIT_CAN_DRIVER",
+      "name": "Canada Driver's License Number",
+      "regex": "\\b(?=.*\\d)[A-Z0-9]{4,15}\\b",
+      "tc": ["HR"]
+    },
+    {
+      "id": "SIT_CAN_HEALTH",
+      "name": "Canada Health Service Number",
+      "regex": "\\b(?!0{9})\\d{9}\\b",
+      "tc": ["Healthcare"]
+    },
+    {
+      "id": "SIT_AUS_DRIVER",
+      "name": "Australia Driver's License Number",
+      "regex": "\\b(?=.*\\d)[A-Z0-9\\-]{4,15}\\b",
+      "tc": ["HR"]
+    },
+    {
+      "id": "SIT_AUS_PASSPORT",
+      "name": "Australia Passport Number",
+      "regex": "\\b[A-Z]\\d{7}\\b",
+      "tc": ["Travel"]
+    },
+    {
+      "id": "SIT_AUS_BANK",
+      "name": "Australia Bank Account Number",
+      "regex": "\\b(?!0{6,9})\\d{6,9}\\b",
+      "tc": ["Finance"]
+    },
+    {
+      "id": "SIT_AZURE_SAS",
+      "name": "Azure SAS Token",
+      "regex": "(?:\\bsig=)[A-Za-z0-9%_-]{12,}" 
+,
+      "tc": ["IP"]
+    },
+    {
+      "id": "SIT_CAN_PASSPORT",
+      "name": "Canada Passport Number",
+      "regex": "\\b(?=(?:.*\\d){1,})[A-Z0-9]{6,9}\\b",
+      "tc": ["Travel"]
+    },
+    {
+      "id": "SIT_AUS_MEDACC",
+      "name": "Australia Medical Account Number",
+      "regex": "\\b(?!0{6,12})\\d{6,12}\\b",
+      "tc": ["Healthcare"]
+    },
+    {
+      "id": "SIT_IBAN",
+      "name": "International Bank Account Number (IBAN)",
+      "regex": "\\b[A-Z]{2}[0-9]{2}[A-Z0-9]{8,30}\\b",
+      "tc": ["Finance"]
+    },
+    {
+      "id": "SIT_BR_CPF",
+      "name": "Brazil CPF Number",
+      "regex": "\\b\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}\\b",
+      "tc": ["HR","Tax"]
+    },
+    {
+      "id": "SIT_BR_RG",
+      "name": "Brazil National ID Card (RG)",
+      "regex": "\\b\\d{2}\\.\\d{3}\\.\\d{3}-\\d{1}\\b",
+      "tc": ["HR"]
+    },
+    {
+      "id": "SIT_UK_NINO",
+      "name": "U.K. National Insurance Number (NINO)",
+      "regex": "\\b(?!BG|GB|NK|KN|TN|NT|ZZ)[A-CEGHJ-PR-TW-Z]{2}\\d{6}[A-D]\\b",
+      "tc": ["HR","Tax"]
+    },
+    {
+      "id": "SIT_FR_INSEE",
+      "name": "France INSEE",
+      "regex": "\\b\\d{13}\\b",
+      "tc": ["HR","Healthcare"]
+    },
+    {
+      "id": "SIT_IP",
+      "name": "IP Address",
+      "regex": "\\b(?:(?:25[0-5]|2[0-4]\\d|[01]?\\d?\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d?\\d)\\b",
+      "tc": ["IP"]
+    },
+    {"id":"SIT_HEALTHCARE_TC","name":"Healthcare TC","regex":"","tc":["Healthcare"]},
+    {"id":"SIT_HEALTH_FORMS","name":"Health/Medical forms TC","regex":"","tc":["Healthcare"]},
+    {"id":"SIT_TAX_TC","name":"Tax TC","regex":"","tc":["Tax"]},
+    {"id":"SIT_HR_TC","name":"HR TC","regex":"","tc":["HR"]},
+    {"id":"SIT_INVOICE_TC","name":"Invoice TC","regex":"","tc":["Finance"]},
+    {"id":"SIT_EMP_INSURANCE_TC","name":"Employee Insurance Files TC","regex":"","tc":["HR","Finance"]},
+    {"id":"SIT_LEGAL_TC","name":"Legal Affairs TC","regex":"","tc":["Legal"]},
+    {"id":"SIT_AGREEMENTS_TC","name":"Agreements TC","regex":"","tc":["Legal","Finance"]},
+    {"id":"SIT_DISCIPLINARY_TC","name":"Employee disciplinary action files TC","regex":"","tc":["HR"]},
+    {"id":"SIT_FINANCE_TC","name":"Finance TC","regex":"","tc":["Finance"]},
+    {"id":"SIT_SOURCE_CODE_TC","name":"Source Code TC","regex":"","tc":["IP"]},
+    {"id":"SIT_BUDGET_TC","name":"Budget TC","regex":"","tc":["Finance"]},
+    {"id":"SIT_IP_TC","name":"IP TC (intellectual property)","regex":"","tc":["IP"]},
+    {"id":"SIT_MA_TC","name":"M and A Files TC","regex":"","tc":["Legal","Finance"]},
+    {"id":"SIT_SOFTWARE_DEV_TC","name":"Software Product Development Files TC","regex":"","tc":["IP","Software"]},
+    {"id":"SIT_PROJECT_DOCS_TC","name":"Project Documents TC","regex":"","tc":["Project"]},
+    {"id":"SIT_BANK_STATEMENT_TC","name":"Bank Statement TC","regex":"","tc":["Finance"]},
+    {"id":"SIT_LOAN_AGREEMENTS_TC","name":"Loan Agreements and offer letters TC","regex":"","tc":["Finance","HR"]},
+    {"id":"SIT_WIRE_TRANSFER_TC","name":"Wire transfer TC","regex":"","tc":["Finance"]},
+    {"id":"SIT_SOW_TC","name":"Statement of Work TC","regex":"","tc":["Project"]}
+  ],
+  "output": {
+    "output_folder": "output/files",
+    "mapping_file": "output/mapping.xlsx",
+    "log_file": "output/generation.log"
+  }
+}
