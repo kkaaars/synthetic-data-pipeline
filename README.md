@@ -1,107 +1,110 @@
-\# Test Task - Pipeline Design
+# Data Pipeline для генерации и валидации SIT-данных
 
-\## Overview
+## Обзор
 
-This project implements a data generation and validation pipeline that produces synthetic documents containing various Sensitive Information Types (SIT).  
-The system automatically generates text and formatted files (.txt, .docx, .pdf, .eml) with sensitive and non-sensitive data, and validates them using regular expressions and heuristics.
+Этот проект реализует конвейер (pipeline) генерации и валидации синтетических данных, содержащих **Sensitive Information Types (SIT)** и **Test Categories (TC)**.  
+Система создаёт разнообразные документы (тексты, DOCX, PDF, EML и др.), в которых присутствуют **реалистичные комбинации чувствительных данных**.  
+Каждый документ помечается как **True Positive (TP)** или **False Positive (FP)** в зависимости от наличия реальных SIT-паттернов.  
+
+Pipeline автоматизирует:
+- создание метаданных и распределения SIT/TC;
+- генерацию текстового контента с нужными метками;
+- конвертацию в разные форматы;
+- валидацию регулярными выражениями и формирование отчётов.
 
 ---
 
-\## Project Structure
+## Структура проекта
 
-\```
-test_pipeline_design/
+```
+TEST_PIPELINE_DESIGN/
 │
-├── config.json               \# Main configuration file with SIT definitions and parameters
+├── config.json               # Основной конфиг с параметрами и определениями SIT
+│
 ├── modules/
-│   ├── meta_generator.py     \# Generates metadata (mapping_meta) describing SIT and test case distribution
-│   ├── content_generator.py  \# Generates document text content based on metadata
-│   ├── postprocessor.py      \# Converts generated text into multiple file formats
-│   └── validator.py          \# Validates generated files and produces a report
+│   ├── meta_generator.py     # Генерация метаданных и распределения SIT/TC
+│   ├── content_generator.py  # Генерация текстов с SIT и случайным контекстом
+│   ├── postprocessor.py      # Преобразование в разные форматы (.txt, .docx, .pdf, .eml)
+│   └── validator.py          # Проверка файлов и формирование отчёта
 │
 ├── output/
-│   ├── files/                \# All generated document files
-│   ├── mapping_meta.csv      \# SIT-to-document mapping table
-│   ├── mapping_final.xlsx    \# Final mapping summary
-│   ├── generation.log        \# Generation log
-│   ├── meta.json
-│   └── validation_report.txt \# Validation report
+│   ├── files/                # Сгенерированные документы
+│   ├── mapping_meta.csv      # Таблица распределения SIT по документам
+│   ├── mapping_final.xlsx    # Итоговое сопоставление SIT и файлов
+│   ├── meta.json             # Метаданные генерации
+│   ├── postprocess.log       # Лог этапа постобработки
+│   └── validation_report.txt # Отчёт валидации
 │
-├── templates/    \# All templates
+├── templates/
+│   ├── chat_templates.md
+│   ├── doc_templates.md
+│   └── email_templates.md
+│
 ├── requirements.txt
-├── show_sit_samples.py
+├── show_sit_samples.py       # Скрипт для отображения примеров SIT-шаблонов
+├── test.py                   
 └── README.md
-\```
+```
 
 ---
 
-\## Setup
+## Установка
 
-Create a virtual environment and install dependencies:
+Создайте виртуальное окружение и установите зависимости:
 
-\```bash
+```bash
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
-\```
+```
 
-\## Execution Order
+---
 
-Run the modules strictly in the following order:
+## 🚀 Порядок выполнения
 
-\```bash
+Модули запускаются строго поэтапно:
+
+```bash
 python modules/meta_generator.py
 python modules/content_generator.py
 python modules/postprocessor.py
 python modules/validator.py
-\```
+```
 
-Each module uses the output from the previous stage and writes results to the `output/` directory.
-
----
-
-\## Module Descriptions
-
-\### meta_generator.py
-
-Generates metadata (mapping_meta.csv) describing which SITs and test categories will appear in each document.
-
-\### content_generator.py
-
-Creates synthetic text files containing the defined SIT patterns and random contextual content.
-
-\### postprocessor.py
-
-Converts generated text files into different file formats (.txt, .docx, .pdf, .eml, and others) to simulate realistic data diversity.
-
-\### validator.py
-
-Checks all generated documents using SIT regex patterns defined in `config.json`.  
-Produces `validation_report.txt`, summarizing:
-
-* True Positives (TP)
-* False Positives (FP)
-* Missing SIT occurrences
+Каждый шаг использует результаты предыдущего, формируя полный цикл генерации и проверки данных.
 
 ---
 
-\## Validation
+## Описание модулей
 
-Run the validation step:
+### 1. meta_generator.py  
+Формирует метаданные (`mapping_meta.csv`) с описанием:
+- какие SIT/TC появятся в каждом документе;
+- распределение TP/FP и количество инстансов;
+- уровень достоверности (Low / Medium / High).
 
-\```bash
-python modules/validator.py
-\```
+### 2. content_generator.py  
+Создаёт синтетический текст на основе метаданных.  
+Каждый документ содержит от 1 до нескольких SIT/TC в разных комбинациях, с контролем частоты и реалистичных контекстов.
 
-Then review the report:
+### 3. postprocessor.py  
+Конвертирует сгенерированные тексты в несколько форматов:
+- `.txt`, `.docx`, `.pdf`, `.eml`, а также вложения (`.pptx`, `.xlsx`);
+- формирует разнообразие типов контента (чаты, письма, документы).
 
-\```
-output/validation_report.txt
-\```
+### 4. validator.py  
+Проверяет файлы по регулярным выражениям SIT из `config.json`.  
+Формирует отчёт `validation_report.txt` с метриками:
 
-Example output snippet:
+- True Positives (TP)  
+- False Positives (FP)  
+- Пропущенные SIT-вхождения  
 
-\```
+---
+
+## Пример отчёта
+
+```
 SIT: SIT_SSN
   TP missing count: 10
   FP flagged count: 0
@@ -109,15 +112,36 @@ SIT: SIT_SSN
 SIT: SIT_DRIVER_US
   FP flagged count: 10
   sample matches: ['XXXXXXX']
-\```
+```
 
 ---
 
-\## Configuration
+## Конфигурация
 
-Adjust parameters in `config.json` to control generation behavior:
+В `config.json` можно управлять параметрами генерации:
 
-* `"per_sit_count"` defines how many documents to generate per SIT.
-* `"formats"` defines which document formats to produce.
-* `"sits"` contains all SIT definitions and regular expressions.
-* `"output"` section defines output file locations.
+| Параметр | Описание |
+|-----------|-----------|
+| `per_sit_count` | Количество документов на каждый SIT |
+| `formats` | Список форматов для генерации |
+| `sits` | Определения SIT и регулярные выражения |
+| `output` | Пути для сохранения файлов и логов |
+
+---
+
+## Пример сценария
+
+- 100 документов на каждый SIT/TC  
+- Распределение количества SIT в документе:
+  - 1 SIT — 30%
+  - 2–3 SIT — 30%
+  - 4–6 SIT — 30%
+  - >6 SIT — 10%  
+- Количество вхождений SIT в документ:
+  - 1 — 35%
+  - 3–5 — 35%
+  - 6–10 — 20%
+  - >10 — 10%
+
+---
+
